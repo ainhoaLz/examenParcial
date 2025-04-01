@@ -17,25 +17,24 @@ class ListaCompraKataTest extends TestCase
     /**
      * @test
      */
-    public function givenAñadirInstructionCompletaReturnsProductAndCuantity()
-    {
-        $result = $this->listaCompra->gestionarListaCompra('añadir pan 2');
-
-        $this->assertEquals('pan x2', $result);
-
-    }
-
-//    /**
-//     * @test
-//     */
-//    public function givenNegativeNumberThrowsException()
+//    public function givenAñadirInstructionCompletaReturnsProductAndQuantity()
 //    {
-//        $this->expectException(\Exception::class);
-//        $this->expectExceptionMessage('Negativos no soportados');
+//        $result = $this->listaCompra->gestionarListaCompra('añadir pan 2');
 //
-//        $this->listaCompra->sum(-1, 2);
+//        $this->assertEquals('pan x2', $result);
 //
 //    }
+
+    /**
+     * @test
+     */
+    public function givenAñadirInstructionAndProductAlreadyExistsReturnsProductWithSumOfQuantities()
+    {
+        $result = $this->listaCompra->gestionarListaCompra('añadir pan 1');
+
+        $this->assertEquals('pan x3', $result);
+
+    }
 
 
 }

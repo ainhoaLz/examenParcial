@@ -5,17 +5,29 @@ use PHPUnit\Util\Exception;
 
 class ListaCompraKata
 {
-    public array $listaCompra;
+    public array $listaCompra = ['pan x2'];
     public function gestionarListaCompra(string $action) : string
     {
         $actionSplit = explode(' ', strtolower($action));
-        if($actionSplit[0] == 'añadir') {
-            //compruebo si ese producto ya esta en la lista
-//            if(in_array($actionSplit[1], $this->listaCompra)) {
-//                //sumar producto
-//            }
-            return $actionSplit[1] . ' x' . $actionSplit[2];
+
+        if(!isset($actionSplit[2])){
+            $actionSplit[2] = 1;
         }
+
+        if($actionSplit[0] == 'añadir') {
+            if(empty($this->listaCompra)) {
+                $this->listaCompra[] = $actionSplit[1] . ' x' . $actionSplit[2];
+                return $this->getRespuesta();
+            }
+            foreach ($this->listaCompra as $producto) {
+                if(str_contains($producto, $actionSplit[1])) {
+                    $this->listaCompra[] = $actionSplit[1] . ' x' . ($actionSplit[2] + intval(substr($producto, -1)));
+                    $this->listaCompra = array_diff($this->listaCompra, array($producto));
+                }
+            }
+            return $this->getRespuesta();
+        }
+
        if($actionSplit[0] == 'eliminar') {
            if(!in_array($actionSplit[1], $this->listaCompra)) {
                return 'El producto seleccionado no existe';
@@ -24,29 +36,20 @@ class ListaCompraKata
        }
        return '';
     }
-//    public function sum(int $number1, int $number2) : int
-//    {
-//        if($this->isNegativeNumber($number1) || $this->isNegativeNumber($number2)) {
-//            throw new Exception("Negativos no soportados");
-//        }
-//        return $number1 + $number2;
-//    }
-//
-//    /**
-//     * @param int $number1
-//     * @return bool
-//     */
-//    public function isNegativeNumber(int $number1): bool
-//    {
-//        return $number1 < 0;
-//    }
-//
-//    /*
-//*       'player1' == $playerName ? $this->player1Score++ : $this->player2Score++;
-//        if('player1' == $playerName){
-//            $this->player1Score++;
-//            return;
-//        }
-//        $this->player2Score++;
-//     */
+
+    /**
+     * @return string
+     */
+    public function getRespuesta(): string
+    {
+        $respuesta = '';
+        if(empty($this->listaCompra))
+        {
+            return $respuesta;
+        }
+        foreach ($this->listaCompra as $producto) {
+            $respuesta .= $producto . ', ';
+        }
+        return substr($respuesta, 0, -2);
+    }
 }
